@@ -1,14 +1,14 @@
 <script>
-    query = ".article-content > h1, .article-content > h2, .article-content > h3, .article-content > h4, .article-content > h5, .article-content > h6"
+    query = ".article-content > h2, .article-content > h3, .article-content > h4, .article-content > h5, .article-content > h6"
 
     document.addEventListener('DOMContentLoaded', () => {
         const headings = document.querySelectorAll(query);
-        const counter = [0, 0, 0, 0, 0, 0]; // Counters for each heading level
+        const counter = [0, 0, 0, 0, 0]; // Counters for each heading level (h2=0 ... h6=4)
 
         headings.forEach((heading, index) => {
-            const level = parseInt(heading.tagName.substring(1), 10) - 1; // h1 -> 0, h2 -> 1, ...
+            const level = parseInt(heading.tagName.substring(1), 10) - 2; // h2 -> 0, h3 -> 1, ...
 
-            // If this is the first heading and it's not h1, set the higher levels to 0
+            // If this is the first heading and it's not h2, set the higher levels to 0
             if (index === 0 && level > 0) {
                 counter.fill(0, 0, level); // Set all higher levels to 0
             }
