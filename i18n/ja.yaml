@@ -52,6 +52,11 @@ search:
     resultTitle:
         other: "#PAGES_COUNT 件 （#TIME_SECONDS 秒）"
 
+list:
+    page:
+        one: "{{ .Count }}件"
+        other: "{{ .Count }}件"
+
 footer:
     builtWith:
         other: Built with {{ .Generator }}
