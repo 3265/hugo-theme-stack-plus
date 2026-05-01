@@ -1,11 +1,12 @@
-.article-page {
-    &.hide-sidebar-sm .left-sidebar {
-        display: none;
+.hide-sidebar-sm .left-sidebar {
+    display: none;
 
-        @include respond(md) {
-            display: inherit;
-        }
+    @include respond(md) {
+        display: inherit;
     }
+}
+
+.article-page {
 
     .main-article {
         background: var(--card-background);
