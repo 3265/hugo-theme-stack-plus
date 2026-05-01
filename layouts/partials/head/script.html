@@ -1,0 +1,35 @@
+<script>
+    query = ".article-content > h1, .article-content > h2, .article-content > h3, .article-content > h4, .article-content > h5, .article-content > h6"
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const headings = document.querySelectorAll(query);
+        const counter = [0, 0, 0, 0, 0, 0]; // Counters for each heading level
+
+        headings.forEach((heading, index) => {
+            const level = parseInt(heading.tagName.substring(1), 10) - 1; // h1 -> 0, h2 -> 1, ...
+
+            // If this is the first heading and it's not h1, set the higher levels to 0
+            if (index === 0 && level > 0) {
+                counter.fill(0, 0, level); // Set all higher levels to 0
+            }
+
+            counter[level]++; // Increment the counter for this level
+
+            // Reset all lower levels to 0
+            counter.fill(0, level + 1);
+
+            // Generate the numbering string, replace '0' with '0' at the beginning and with '' for the rest
+            const numbering = counter.slice(0, level + 1).map((num, idx) => {
+                return (idx === 0 || num !== 0) ? num : '0';
+            }).join('.') + '.';
+
+            // Create a span element to hold the numbering
+            const span = document.createElement('span');
+            span.className = 'article-header-index';
+            span.textContent = numbering;
+
+            // Insert the numbering before the heading text
+            heading.insertBefore(span, heading.firstChild);
+        });
+    });
+  </script>
