@@ -8,7 +8,10 @@
             <article>
                 <a href="{{ .Page.RelPermalink }}">
                     <div class="article-details">
-                        <h2 class="article-title">{{ .Page.Title }} ({{ .Count }})</h2>
+                        <h2 class="article-title">{{ .Page.Title }}</h2>
+                        <footer class="article-time">
+                            <time>{{ T "list.page" .Count }}</time>
+                        </footer>
                     </div>
                     {{- $image := partialCached "helper/image" (dict "Context" .Page "Type" "articleList") .Page.RelPermalink "articleList" -}}
                     {{ if $image.exists }}
