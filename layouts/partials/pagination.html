@@ -1,26 +1,46 @@
 {{ if gt .Paginator.TotalPages 1 }}
-    <nav class='pagination'>
-        {{ $.Scratch.Set "hasPrevDots" false }}
-        {{ $.Scratch.Set "hasNextDots" false }}
+    {{ $paginator := .Paginator }}
+    {{ $current := $paginator.PageNumber }}
+    {{ $total := $paginator.TotalPages }}
+    {{ $windowSize := 5 }}
+    {{ $half := div (sub $windowSize 1) 2 }}
+    {{ $start := sub $current $half }}
+    {{ $end := add $current $half }}
+    {{ if lt $start 1 }}
+        {{ $end = add $end (sub 1 $start) }}
+        {{ $start = 1 }}
+    {{ end }}
+    {{ if gt $end $total }}
+        {{ $start = sub $start (sub $end $total) }}
+        {{ $end = $total }}
+    {{ end }}
+    {{ if lt $start 1 }}
+        {{ $start = 1 }}
+    {{ end }}
 
-        {{ range .Paginator.Pagers }}
-            {{ if eq . $.Paginator }}
-                <span class='page-link current'>
-                    {{- .PageNumber -}}
-                </span>
-                {{ else if or (or (eq . $.Paginator.First) (eq . $.Paginator.Prev)) (or  (eq . $.Paginator.Next) (eq . $.Paginator.Last )) }}
-                    <a class='page-link' href='{{ .URL }}'>
-                        {{- .PageNumber -}}
-                    </a>
+    <nav class='pagination'>
+        {{ if gt $start 1 }}
+            <a class='page-link' href='{{ $paginator.First.URL }}'>1</a>
+            {{ if gt $start 2 }}
+                <span class='page-link dots'>&hellip;</span>
+            {{ end }}
+        {{ end }}
+
+        {{ range $paginator.Pagers }}
+            {{ if and (ge .PageNumber $start) (le .PageNumber $end) }}
+                {{ if eq .PageNumber $current }}
+                    <span class='page-link current'>{{- .PageNumber -}}</span>
                 {{ else }}
-                    {{ if and (not ($.Scratch.Get "hasPrevDots")) (lt .PageNumber $.Paginator.PageNumber)  }}
-                        {{ $.Scratch.Set "hasPrevDots" true }}
-                        <span class='page-link dots'>&hellip;</span>
-                    {{ else if and (not ($.Scratch.Get "hasNextDots")) (gt .PageNumber $.Paginator.PageNumber) }}
-                        {{ $.Scratch.Set "hasNextDots" true }}
-                        <span class='page-link dots'>&hellip;</span>
-                    {{ end }}
+                    <a class='page-link' href='{{ .URL }}'>{{- .PageNumber -}}</a>
                 {{ end }}
             {{ end }}
+        {{ end }}
+
+        {{ if lt $end $total }}
+            {{ if lt $end (sub $total 1) }}
+                <span class='page-link dots'>&hellip;</span>
+            {{ end }}
+            <a class='page-link' href='{{ $paginator.Last.URL }}'>{{ $total }}</a>
+        {{ end }}
     </nav>
 {{ end }}
